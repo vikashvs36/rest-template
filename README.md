@@ -177,4 +177,12 @@ We can make good use of the postForObject(), postForEntity() and postForLocation
 	HttpEntity<Post> entity = new HttpEntity<>(post);
 	URI location = new RestTemplate().postForLocation(COMMON_URL, entity);	
 
+### HTTP PUT Method
+
+	public void put(String url, Object request, Object... urlVariables) throws RestClientException;
+	
+	public void put(String url, Object request, Map<String, ?> urlVariables) throws RestClientException;
+	
+
+
 If you want to know about advance, please [click here](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) for reference.
