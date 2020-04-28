@@ -8,6 +8,8 @@ Spring's RestTemplate is a robust, popular Java-based REST client. This Applicat
 
 * Spring Web
 * Spring Devtools
+* Spring Data JPA
+* H2 Database
 
 **Technologies : **
 
@@ -24,7 +26,7 @@ RestTemplate provides an abstraction for making RESTful HTTP requests. To send a
 The four RestTemplate constructors are listed below. The default constructor does not include any message body converters. You must add a message converter when using the default constructor
 
 	RestTemplate();
-
+	
 	RestTemplate(boolean includeDefaultConverters);
 	
 	RestTemplate(ClientHttpRequestFactory requestFactory);
@@ -42,14 +44,38 @@ There are a lots of methods support in RestTemplate client. so mainly six HTTP m
 * HEAD
 * OPTIONS
 
-we are going to see all high level methods one by one.
+we are going to see all high level methods one by one. before Now I am going to create own API's to test RestTemplate client. 
+
+#### Created Own API to test RestTemplate
+
+For the Post service, I created some Rest APi's to test and better command on RestTemplate.
+
+	// Method : GET - Find All Post object With pagination if size more than 0
+	http://localhost:1111/api/posts?page=0&size=10
+	
+	// Method : GET - Find Post object by Id
+	http://localhost:1111/api/post/1
+	
+	// Method : POST - Save Post object 
+	http://localhost:1111/api/post 	
+	
+	// Method : POST - Save multiple Post object at a time
+	http://localhost:1111/api/posts
+	
+	// Method : PUT - Update Post object
+	http://localhost:1111/api/post
+	
+	// Method : DELETE - Delete Post object
+	http://localhost:1111/api/post
+
+Now we are able to test api's from same application.
 
 ### HTTP GET
 
 Mostly we use get method many times. so we have to pay more attention here. I will demonstrate it by example as well. 
 
 	public <T> T getForObject(String url, Class<T> responseType, Object... urlVariables) throws RestClientException;
-
+	
 	public <T> T getForObject(String url, Class<T> responseType, Map<String, ?> urlVariables) throws RestClientException;
 	
 	public <T> T getForObject(URI url, Class<T> responseType) throws RestClientException;
@@ -92,7 +118,7 @@ Now, we created a controller to fetch the response through own API. Let's see :
 	Map<String, String> urlParameters = new HashMap<>();
 	urlParameters.put("page", Integer.toString(page));
 	urlParameters.put("pageSize", Long.toString(pageSize));
-
+	
 	String url = "https://jsonplaceholder.typicode.com/posts?page="+page+"&pageSize="+pageSize;
 	ResponseEntity<Post[]> forEntity = new RestTemplate().getForEntity(url, Post[].class, urlParameters);
 	List<Post> posts = Arrays.asList(forEntity.getBody());
@@ -108,7 +134,7 @@ Now, we created a controller to fetch the response through own API. Let's see :
 	forEntity.getStatusCodeValue()
 	forEntity.getHeaders().getContentType()
 
-** If only the body is of interest, the getForObject() method can be used to query the resource directly as a Java object: **
+**If only the body is of interest, the getForObject() method can be used to query the resource directly as a Java object: **
 
 	Post postObj = new RestTemplate().getForObject(url, Post.class, Long.toString(id));
 	
@@ -119,6 +145,6 @@ Now, we created a controller to fetch the response through own API. Let's see :
 	
 	ObjectMapper mapper = new ObjectMapper();
 	JsonNode readTree = mapper.readTree(jsonString);
-	
 
-If you want to know about please [click here](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) for reference.
+
+If you want to know about advance, please [click here](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) for reference.
