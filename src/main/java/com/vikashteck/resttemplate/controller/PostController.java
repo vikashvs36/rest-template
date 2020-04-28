@@ -3,8 +3,6 @@ package com.vikashteck.resttemplate.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vikashteck.resttemplate.domain.Post;
@@ -28,20 +27,19 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 
-	@GetMapping(value = "/api/posts", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Post> findAll(@PathParam("page") int page, @PathParam("size") int size) {
+	@GetMapping(value = "/api/post", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Post> findAll(@RequestParam(name = "page", required = false) Integer page,
+			@RequestParam(name = "size", required = false) Integer size) {
 		LOGGER.info("com.vikashteck.resttemplate.controller.PostController.findAll(int, int)");
-		List<Post> posts = null;
 		try {
-			if (page >= 0 && size > 0) {
-				System.out.println(page + " - " + size);
-				posts = postService.findAll(page, size);
+			if (page != null && size != null) {
+				return postService.findAll(page, size);
 			} else
-				posts = postService.findAll();
+				return postService.findAll();
 		} catch (Exception e) {
 			LOGGER.error("Error : " + e.getMessage());
 		}
-		return posts;
+		return new ArrayList<Post>();
 	}
 
 	@GetMapping(value = "/api/post/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

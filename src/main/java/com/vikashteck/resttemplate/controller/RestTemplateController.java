@@ -26,6 +26,10 @@ import com.vikashteck.resttemplate.domain.Post;
 public class RestTemplateController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestTemplateController.class);
+	
+	private static final String COMMON_URL = "http://localhost:1111/api/post";
+	private static final String URL_FIND_ALL_WITH_PAGINATION = "http://localhost:1111/api/post?page={page}&size={pageSize}";
+//	private static final String URL_FIND_BY_ID = COMMON_URL+"/{id}";
 
 	/*
 	 * Fetch All Post
@@ -34,8 +38,7 @@ public class RestTemplateController {
 	public List<Post> findAll() {
 		LOGGER.info("com.vikashteck.resttemplate.controller.PostController.findAll()");
 
-		String url = "https://jsonplaceholder.typicode.com/posts";
-		ResponseEntity<Post[]> forEntity = new RestTemplate().getForEntity(url, Post[].class);
+		ResponseEntity<Post[]> forEntity = new RestTemplate().getForEntity(COMMON_URL, Post[].class);
 
 		return Arrays.asList(forEntity.getBody());
 	}
@@ -50,9 +53,8 @@ public class RestTemplateController {
 		Map<String, String> urlParameters = new HashMap<>();
 		urlParameters.put("page", Integer.toString(page));
 		urlParameters.put("pageSize", Long.toString(pageSize));
-
-		String url = "https://jsonplaceholder.typicode.com/posts?page=" + page + "&pageSize=" + pageSize;
-		ResponseEntity<Post[]> forEntity = new RestTemplate().getForEntity(url, Post[].class, urlParameters);
+		
+		ResponseEntity<Post[]> forEntity = new RestTemplate().getForEntity(URL_FIND_ALL_WITH_PAGINATION, Post[].class, urlParameters);
 
 		return Arrays.asList(forEntity.getBody());
 	}
@@ -61,19 +63,20 @@ public class RestTemplateController {
 	 * fetch all Posts by id
 	 */
 	@GetMapping(value = "/posts/{id}")
-	public Post findByPost(@PathVariable("id") Long id) {
+	public Post findByPost(@PathVariable("id") long id) {
 		LOGGER.info("com.vikashteck.resttemplate.controller.PostController.findByPost(Long)");
-
-		String url = "https://jsonplaceholder.typicode.com/posts/" + id;
-		ResponseEntity<Post> forEntity = new RestTemplate().getForEntity(url, Post.class);
+		String URL_FIND_BY_ID = COMMON_URL + "/"+id;
+		System.out.println(URL_FIND_BY_ID+" : "+id);
+		ResponseEntity<Post> forEntity = new RestTemplate().getForEntity(URL_FIND_BY_ID, Post.class);
 		Post postBody = forEntity.getBody();
+		System.out.println("postBody : "+postBody);
 
 		LOGGER.info("Status code value: " + forEntity.getStatusCodeValue());
 		LOGGER.info("HTTP Header 'ContentType': " + forEntity.getHeaders().getContentType());
 
 		// If only the body is of interest, the getForObject() method can be used to
 		// query the resource directly as a Java object:
-		Post postObj = new RestTemplate().getForObject(url, Post.class, Long.toString(id));
+		Post postObj = new RestTemplate().getForObject(URL_FIND_BY_ID, Post.class, Long.toString(id));
 
 		return postObj;
 	}
@@ -83,10 +86,10 @@ public class RestTemplateController {
 	 * possible. If the class type is simply String.class, we get the raw JSON
 	 * string:
 	 */
-	@GetMapping(value = "/posts/post/{id}")
+	@GetMapping(value = "/posts/json-node/{id}")
 	public JsonNode getAsJsonNode(@PathVariable("id") long id) throws IOException {
-		String url = "https://jsonplaceholder.typicode.com/posts/" + id;
-		String jsonString = new RestTemplate().getForObject(url, String.class, id);
+		String URL_FIND_BY_ID = COMMON_URL + "/"+id;
+		String jsonString = new RestTemplate().getForObject(URL_FIND_BY_ID, String.class, id);
 		System.out.println(jsonString);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode readTree = mapper.readTree(jsonString);

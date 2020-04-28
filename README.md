@@ -46,12 +46,15 @@ There are a lots of methods support in RestTemplate client. so mainly six HTTP m
 
 we are going to see all high level methods one by one. before Now I am going to create own API's to test RestTemplate client. 
 
-#### Created Own API to test RestTemplate
+### Created Own API to test RestTemplate
 
 For the Post service, I created some Rest APi's to test and better command on RestTemplate.
 
+	// Method : GET - Find All Post object 
+	http://localhost:1111/api/post
+	
 	// Method : GET - Find All Post object With pagination if size more than 0
-	http://localhost:1111/api/posts?page=0&size=10
+	http://localhost:1111/api/post?page=0&size=10
 	
 	// Method : GET - Find Post object by Id
 	http://localhost:1111/api/post/1
@@ -104,10 +107,9 @@ Now, we created a controller to fetch the response through own API. Let's see :
 	@GetMapping(value = "/api/posts")
 	public List<Post> findAllPost() {
 	
-		String url = "https://jsonplaceholder.typicode.com/posts";
+		String url = "http://localhost:1111/api/post";
 		
 		ResponseEntity<Post[]> forEntity = new RestTemplate().getForEntity(url, Post[].class);
-		
 		Post[] posts = forEntity.getBody();
 		
 		return Arrays.asList(posts);
@@ -119,13 +121,13 @@ Now, we created a controller to fetch the response through own API. Let's see :
 	urlParameters.put("page", Integer.toString(page));
 	urlParameters.put("pageSize", Long.toString(pageSize));
 	
-	String url = "https://jsonplaceholder.typicode.com/posts?page="+page+"&pageSize="+pageSize;
+	String url = "http://localhost:1111/api/post?page={page}&size={size};
 	ResponseEntity<Post[]> forEntity = new RestTemplate().getForEntity(url, Post[].class, urlParameters);
 	List<Post> posts = Arrays.asList(forEntity.getBody());
 	
 **Let’s start with a simple example to query a single resource:**
 
-	String url = "https://jsonplaceholder.typicode.com/posts/"+id;
+	String url = "http://localhost:1111/api/post/"+id;
 	ResponseEntity<Post> forEntity = new RestTemplate().getForEntity(url, Post.class);
 	Post post = forEntity.getBody();
 
@@ -140,7 +142,7 @@ Now, we created a controller to fetch the response through own API. Let's see :
 	
 **However, if you want to operate directly on the JSON string, this is also possible. If the class type is simply String.class, we get the raw JSON string:**
 
-	String URL = "https://jsonplaceholder.typicode.com/posts/" + id;
+	String URL = "http://localhost:1111/api/post/" + id;
 	String jsonString = new RestTemplate().getForObject(URL, String.class, id);
 	
 	ObjectMapper mapper = new ObjectMapper();
