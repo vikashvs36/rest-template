@@ -7,12 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.websocket.server.PathParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -129,6 +128,12 @@ public class RestTemplateController {
 	@PutMapping(value = "/posts")
 	public void putMethod(@RequestBody Post post) {
 		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.putMethod(Post)");
-		new RestTemplate().put(COMMON_URL +"/{id}", Post.class, Long.toString(post.getId()));
+		new RestTemplate().put(COMMON_URL + "/{id}", Post.class, Long.toString(post.getId()));
+	}
+
+	@DeleteMapping(value = "/posts/id")
+	public void deleteMethod(@PathVariable("id") long id) {
+		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.deleteMethod(long)");
+		new RestTemplate().delete(COMMON_URL + "/"+id);
 	}
 }

@@ -182,7 +182,19 @@ We can make good use of the postForObject(), postForEntity() and postForLocation
 	public void put(String url, Object request, Object... urlVariables) throws RestClientException;
 	
 	public void put(String url, Object request, Map<String, ?> urlVariables) throws RestClientException;
-	
 
+**Example : **	
 
+	new RestTemplate().put(COMMON_URL +"/{id}", Post.class, Long.toString(post.getId()));
+
+### HTTP Delete Method	
+
+	public void delete(String url, Object... urlVariables) throws RestClientException;
+	public void delete(String url, Map<String, ?> urlVariables) throws RestClientException;
+	public void delete(URI url) throws RestClientException;
+
+**Example :**
+
+	new RestTemplate().delete(COMMON_URL + "/{id}", Long.toString(id));	
+ 
 If you want to know about advance, please [click here](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) for reference.
