@@ -183,7 +183,7 @@ We can make good use of the postForObject(), postForEntity() and postForLocation
 	
 	public void put(String url, Object request, Map<String, ?> urlVariables) throws RestClientException;
 
-**Example : **	
+**Example :**	
 
 	new RestTemplate().put(COMMON_URL +"/{id}", Post.class, Long.toString(post.getId()));
 
