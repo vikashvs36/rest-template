@@ -148,5 +148,33 @@ Now, we created a controller to fetch the response through own API. Let's see :
 	ObjectMapper mapper = new ObjectMapper();
 	JsonNode readTree = mapper.readTree(jsonString);
 
+### HTTP POST Method
+
+We can make good use of the postForObject(), postForEntity() and postForLocation() APIs.
+
+	public <T> T postForObject(URI url, Object request, Class<T> responseType) throws RestClientException;
+	
+	public <T> ResponseEntity<T> postForEntity(URI url, Object request, Class<T> responseType) throws RestClientException;
+	
+	public URI postForLocation(URI url, Object request) throws RestClientException;
+	
+
+**postForObject()**
+
+	private static final String COMMON_URL = "http://localhost:1111/api/post";
+
+	HttpEntity<Post> entity = new HttpEntity<>(post);
+	ResponseEntity<Post> forEntity = new RestTemplate().postForEntity(COMMON_URL, entity, Post.class);
+	Post postObj = forEntity.getBody();
+
+**postForEntity()** 
+
+	HttpEntity<Post> entity = new HttpEntity<>(post);
+	Post postObj = new RestTemplate().postForObject(COMMON_URL, entity, Post.class);
+
+**postForLocation()**
+
+	HttpEntity<Post> entity = new HttpEntity<>(post);
+	URI location = new RestTemplate().postForLocation(COMMON_URL, entity);	
 
 If you want to know about advance, please [click here](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) for reference.

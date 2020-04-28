@@ -1,6 +1,7 @@
 package com.vikashteck.resttemplate.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +11,12 @@ import javax.websocket.server.PathParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -87,13 +91,36 @@ public class RestTemplateController {
 	 * string:
 	 */
 	@GetMapping(value = "/posts/json-node/{id}")
-	public JsonNode getAsJsonNode(@PathVariable("id") long id) throws IOException {
+	public JsonNode getAsJsonNode(@PathVariable("id") long id) throws Exception {
+		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.getAsJsonNode(long)");
 		String URL_FIND_BY_ID = COMMON_URL + "/"+id;
 		String jsonString = new RestTemplate().getForObject(URL_FIND_BY_ID, String.class, id);
-		System.out.println(jsonString);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode readTree = mapper.readTree(jsonString);
 		return readTree;
 	}
 
+	@PostMapping(value = "/posts-postForEntity")
+	public Post postForEntity(@RequestBody Post post) {
+		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.postForEntity(Post)");
+		HttpEntity<Post> entity = new HttpEntity<>(post);
+		ResponseEntity<Post> forEntity = new RestTemplate().postForEntity(COMMON_URL, entity, Post.class);
+		return forEntity.getBody();
+	}
+	
+	@PostMapping(value = "/posts-postForObject")
+	public Post postForObject(@RequestBody Post post) {
+		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.postForObject(Post)");
+		HttpEntity<Post> entity = new HttpEntity<>(post);
+		Post postObj = new RestTemplate().postForObject(COMMON_URL, entity, Post.class);
+		return postObj;
+	}
+	
+	@PostMapping(value = "/posts-postForLocation")
+	public URI postForLocation(@RequestBody Post post) {
+		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.postForLocation(Post)");
+		HttpEntity<Post> entity = new HttpEntity<>(post);
+		URI location = new RestTemplate().postForLocation(COMMON_URL, entity);
+		return location;
+	}
 }
