@@ -145,12 +145,12 @@ public class RestTemplateController {
 		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.APIWithHeaders");
 
 		// Mention the URI which you want to execute.
-		String uri = "http://103.205.67.243:2222/api/master/session";
+		String uri = "http://vikash@teck/api/master/session";
 
 		// Create HttpHeaders object to set headers.
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2VfaWQiXSwidXNlcl9uYW1lIjoiU3lzYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTkwNzc0NDk2LCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImp0aSI6ImI1YmQ3YThlLTI5YWEtNDQ2Mi04YzMzLTYyNDExMjg3Y2I5NSIsImNsaWVudF9pZCI6Im1ocmRfc2hhYWxhIn0.wJhD5a-U3AEjkaBc1ePPVin-fqRKwl1o9rCwvQBVD80");
+		headers.set("Authorization", "Bearer ****************************");
 
 		// Create HttpEntity object to get headers or any object as parameters or body and assign to RestTemplate Object
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
