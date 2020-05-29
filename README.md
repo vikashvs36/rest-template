@@ -196,5 +196,34 @@ We can make good use of the postForObject(), postForEntity() and postForLocation
 **Example :**
 
 	new RestTemplate().delete(COMMON_URL + "/{id}", Long.toString(id));	
+
+## Headers with RestTemplate
+
+We execute different types of APIs. Some are normal and some are secure. We know simple api execution. Now we need to 
+know execution third party secure api with authentication (token). so token might be add in headers.
+
+Yep, We are going to execute API with Token with the help of RestTemplate. Let see step by step:
+
+**Step 1: HttpHeaders**
+ 
+Create HttpHeaders Object to add some headers. In hedders object we can set token, contentType and all.
+ 
+    // Create HttpHeaders object to set headers.
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("Authorization", "Bearer **********");
+
+**Step 2: HttpEntity**
+
+Create HttpEntity object to get headers or any object as parameters or body and assign it to RestTemplate Object
+
+	HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+**Step 3: RestTemplate**
+
+Create RestTemplate Object and execute exchange method to get ResponseEntity object.
+
+    ResponseEntity<String[]> respEntity =new RestTemplate().exchange(uri, HttpMethod.GET, entity, String[].class);
+    		String[] resp = respEntity.getBody();
  
 If you want to know about advance, please [click here](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) for reference.

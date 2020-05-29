@@ -9,8 +9,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -135,5 +134,32 @@ public class RestTemplateController {
 	public void deleteMethod(@PathVariable("id") long id) {
 		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.deleteMethod(long)");
 		new RestTemplate().delete(COMMON_URL + "/"+id);
+	}
+
+	/*
+	* If you want to execute third party api with headers like Authorization and all.
+	* @Return: return may be any Class/Object type but here I am using String class.
+	* */
+	@GetMapping(value = "/APIWithHeaders")
+	public String APIWithHeaders() {
+		LOGGER.info("com.vikashteck.resttemplate.controller.RestTemplateController.APIWithHeaders");
+
+		// Mention the URI which you want to execute.
+		String uri = "http://103.205.67.243:2222/api/master/session";
+
+		// Create HttpHeaders object to set headers.
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzb3VyY2VfaWQiXSwidXNlcl9uYW1lIjoiU3lzYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTkwNzc0NDk2LCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImp0aSI6ImI1YmQ3YThlLTI5YWEtNDQ2Mi04YzMzLTYyNDExMjg3Y2I5NSIsImNsaWVudF9pZCI6Im1ocmRfc2hhYWxhIn0.wJhD5a-U3AEjkaBc1ePPVin-fqRKwl1o9rCwvQBVD80");
+
+		// Create HttpEntity object to get headers or any object as parameters or body and assign to RestTemplate Object
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+
+		System.out.println("------------------------------");
+
+		// Create RestTemplate Object and execute exchange method to get ResponseEntity object.
+		ResponseEntity<String> respEntity =new RestTemplate().exchange(uri, HttpMethod.GET, entity, String.class);
+
+		return respEntity.getBody();
 	}
 }
